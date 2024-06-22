@@ -18,11 +18,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	neededArea := Solution(input)
-	fmt.Printf("Total area needed: %d", neededArea)
+	neededWrappingArea := PartOneSolution(input)
+	neededRibbonLength := PartTwoSolution(input)
+	fmt.Printf("Total area needed: %d\n", neededWrappingArea)
+	fmt.Printf("Ribbon length needed: %d\n", neededRibbonLength)
 }
 
-func Solution(input []byte) int {
+func PartOneSolution(input []byte) int {
 	var neededArea int
 	for _, line := range bytes.Split(input, []byte("\n")) {
 		dimensions := bytes.Split(line, []byte("x"))
@@ -33,4 +35,18 @@ func Solution(input []byte) int {
 	}
 
 	return neededArea
+}
+
+func PartTwoSolution(input []byte) int {
+	var neededLength int
+
+	for _, line := range bytes.Split(input, []byte("\n")) {
+		dimensions := bytes.Split(line, []byte("x"))
+		x, _ := strconv.Atoi(string(dimensions[0]))
+		y, _ := strconv.Atoi(string(dimensions[1]))
+		z, _ := strconv.Atoi(string(dimensions[2]))
+		neededLength += 2*(x+y+z-max(x, y, z)) + x*y*z
+	}
+
+	return neededLength
 }
