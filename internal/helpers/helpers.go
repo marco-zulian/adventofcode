@@ -53,3 +53,13 @@ func GetInput(day, year int) ([]byte, error) {
 	fmt.Println(err)
 	return content, nil
 }
+
+func Contains[T comparable](value T, slice []T) bool {
+	for _, v := range slice {
+		if value == v {
+			return true
+		}
+	}
+
+	return false
+}
