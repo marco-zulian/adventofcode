@@ -42,7 +42,6 @@ func PartTwoSolution(input []byte) int {
 	for _, line := range lines {
 		quoted := strconv.Quote(string(line))
 		result += len(quoted) - len(line)
-		fmt.Println(quoted, string(line))
 	}
 
 	return result
