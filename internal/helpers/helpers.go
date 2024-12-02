@@ -23,7 +23,7 @@ func GetInput(day, year int) ([]byte, error) {
 
 	cookie := &http.Cookie{
 		Name:  "session",
-		Value: "53616c7465645f5fb4fecb996933f2e59abe5cd067a5ff7f7b085a877b1c2eb09f3be29343e0cd71866b239fca250063591ab5c9c334d84e7cd6d3442be1ca13",
+		Value: "53616c7465645f5fe6c2a746dd8425143171d518691709286b995f82d5c6ba84a77e8cf5a8e6ec6752fcf910593724cdd7f108773de3d5136d8c01764bbc00d0",
 	}
 
 	requestURL := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
