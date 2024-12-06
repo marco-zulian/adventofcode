@@ -3,6 +3,7 @@ package main
 import (
 	"adventofcode/internal/helpers"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -13,50 +14,61 @@ var day = 5
 func main() {
 	input, _ := helpers.GetInput(year, day)
 
-	correctlyOrderedSum := PartOneSolution(input)
+	correctlyOrderedSum, incorrectlyOrderedSum := PartOneSolution(input)
 
-	fmt.Printf("Multiplication result: %d.\n", correctlyOrderedSum)
+	fmt.Printf("Correct sum: %d. Incorrect sum: %d\n", correctlyOrderedSum, incorrectlyOrderedSum)
 }
 
-func PartOneSolution(input []byte) int {
-	var total int
+func PartOneSolution(input []byte) (int, int) {
+	var totalCorrect int
+	var totalIncorrect int
 
 	inputParts := strings.Split(string(input), "\n\n")
 	rules, orders := inputParts[0], inputParts[1]
 
-	graph := make(map[int][]int)
+	graph := make(map[int]map[int]bool)
 
 	for _, rule := range strings.Split(rules, "\n") {
 		parts := strings.Split(rule, "|")
 		from, _ := strconv.Atoi(parts[0])
 		to, _ := strconv.Atoi(parts[1])
 
-		graph[from] = append(graph[from], to)
+		if graph[from] == nil {
+			graph[from] = make(map[int]bool)
+		}
+
+		graph[from][to] = true
 	}
 
 	for _, order := range strings.Split(orders, "\n") {
-		seen := make(map[int]bool)
 		valid := true
 		values := strings.Split(order, ",")
+		var correctedOrder []int
 
 		for _, item := range values {
 			value, _ := strconv.Atoi(item)
+			added := false
 
-			for _, previous := range graph[value] {
-				if seen[previous] {
+			for j, to := range correctedOrder {
+				if graph[value][to] {
+					correctedOrder = slices.Insert(correctedOrder, j, value)
+					added = true
 					valid = false
 					break
 				}
 			}
 
-			seen[value] = true
+			if !added {
+				correctedOrder = append(correctedOrder, value)
+			}
 		}
 
 		if valid {
-			midValue, _ := strconv.Atoi(values[len(values)/2])
-			total += midValue
+			totalCorrect += correctedOrder[len(values)/2]
+		} else {
+			totalIncorrect += correctedOrder[len(values)/2]
 		}
 	}
 
-	return total
+	return totalCorrect, totalIncorrect
 }
